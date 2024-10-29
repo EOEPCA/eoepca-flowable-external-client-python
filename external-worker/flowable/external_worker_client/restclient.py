@@ -13,6 +13,7 @@ from flowable.external_worker_client.list_result import ListResult
 from flowable.external_worker_client.request_converter import convert_from_engine_rest_variable
 
 JOB_API = '/external-job-api'
+PROCESS_API = "/service"
 
 
 class FlowableExternalWorkerRestClient(object):
@@ -149,3 +150,14 @@ class FlowableExternalWorkerRestClient(object):
         if r.status_code != 204:
             raise FlowableRestException(r.status_code, r.text)
 
+    def get_process_instance_history(self, process_instance_id: str):
+        url = f"{self.flowable_host}{PROCESS_API}/history/historic-process-instances"
+        
+        if process_instance_id is not None and len(process_instance_id) > 0:
+            url = f"{self.flowable_host}{PROCESS_API}/history/historic-process-instances/{process_instance_id}"
+
+        r = self.request_session.get(url)
+        if r.status_code != 200:
+            raise FlowableRestException(r.status_code, r.text)
+        
+        return r.json()

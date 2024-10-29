@@ -65,8 +65,7 @@ class ExternalWorkerClient(object):
             auth=auth,
             customize_session=customize_session
         )
-        config = config if config is not None else {}
-        self.config = config
+        self.config = config if config is not None else {}
 
     def subscribe(
             self,
@@ -111,3 +110,6 @@ class ExternalWorkerClient(object):
                     print("An error occurred during job execution " + job.id,  file=sys.stderr)
                     print(e,  file=sys.stderr)
                     self._restClient.fail_job(job.id, e.__str__())
+
+    def get_process_instance_history(self, process_instance_id: str = None):
+        return self._restClient.get_process_instance_history(process_instance_id)
